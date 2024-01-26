@@ -298,7 +298,7 @@ export const createConfiguration: (
                   loader: 'sass-loader',
                   options: {
                     sassOptions: {
-                      includePaths: ['src', 'src/sass'],
+                      includePaths: ['../component/src/scss'],
                     },
                   },
                 },
