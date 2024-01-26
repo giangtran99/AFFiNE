@@ -386,6 +386,7 @@ __metadata:
     react-router-dom: "npm:^6.16.0"
     react-virtuoso: "npm:^4.6.2"
     rxjs: "npm:^7.8.1"
+    sass-loader: "npm:13.2.2"
     ses: "npm:^1.0.0"
     source-map-loader: "npm:^4.0.1"
     style-loader: "npm:^3.3.3"
@@ -24664,6 +24665,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"klona@npm:^2.0.6":
+  version: 2.0.6
+  resolution: "klona@npm:2.0.6"
+  checksum: ed7e2c9af58cb646e758e60b75dec24bf72466066290f78c515a2bae23a06fa280f11ff3210c43b94a18744954aa5358f9d46583d5e4c36da073ecc3606355c4
+  languageName: node
+  linkType: hard
+
 "kolorist@npm:^1.8.0":
   version: 1.8.0
   resolution: "kolorist@npm:1.8.0"
@@ -31186,6 +31194,31 @@ __metadata:
   version: 2.1.2
   resolution: "safer-buffer@npm:2.1.2"
   checksum: 7eaf7a0cf37cc27b42fb3ef6a9b1df6e93a1c6d98c6c6702b02fe262d5fcbd89db63320793b99b21cb5348097d0a53de81bd5f4e8b86e20cc9412e3f1cfb4e83
+  languageName: node
+  linkType: hard
+
+"sass-loader@npm:13.2.2":
+  version: 13.2.2
+  resolution: "sass-loader@npm:13.2.2"
+  dependencies:
+    klona: "npm:^2.0.6"
+    neo-async: "npm:^2.6.2"
+  peerDependencies:
+    fibers: ">= 3.1.0"
+    node-sass: ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0
+    sass: ^1.3.0
+    sass-embedded: "*"
+    webpack: ^5.0.0
+  peerDependenciesMeta:
+    fibers:
+      optional: true
+    node-sass:
+      optional: true
+    sass:
+      optional: true
+    sass-embedded:
+      optional: true
+  checksum: 4bf41edea2f32470cbdbb955bb77e9133f8e8b304278814a641e8acbe28c197a8b88fa16d113f18614e547112c78e1bcbd05d4a1b978e1b551ac9361da439cc5
   languageName: node
   linkType: hard
 

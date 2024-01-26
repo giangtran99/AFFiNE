@@ -292,6 +292,19 @@ export const createConfiguration: (
               loader: 'raw-loader',
             },
             {
+              test: /\.scss$/,
+              use: [
+                {
+                  loader: 'sass-loader',
+                  options: {
+                    sassOptions: {
+                      includePaths: ['src', 'src/sass'],
+                    },
+                  },
+                },
+              ],
+            },
+            {
               test: /\.css$/,
               use: [
                 buildFlags.mode === 'development'

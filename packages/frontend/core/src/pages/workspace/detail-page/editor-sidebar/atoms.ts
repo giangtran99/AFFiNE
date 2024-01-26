@@ -3,6 +3,7 @@ import { assertExists } from '@blocksuite/global/utils';
 import { atom } from 'jotai';
 import { selectAtom } from 'jotai/utils';
 
+import { chatCollaborationExtension } from './extensions/channel-view';
 import { copilotExtension } from './extensions/copilot';
 import { framePanelExtension } from './extensions/frame';
 import { outlineExtension } from './extensions/outline';
@@ -14,6 +15,7 @@ export const extensions: EditorExtension[] = [
   outlineExtension,
   framePanelExtension,
   copilotExtension,
+  chatCollaborationExtension,
 ];
 
 export interface EditorSidebarState {
