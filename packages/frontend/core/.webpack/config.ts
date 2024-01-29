@@ -1,7 +1,6 @@
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
-
 import type { Configuration as DevServerConfiguration } from 'webpack-dev-server';
 import { PerfseePlugin } from '@perfsee/webpack';
 import { sentryWebpackPlugin } from '@sentry/webpack-plugin';
@@ -292,19 +291,6 @@ export const createConfiguration: (
               loader: 'raw-loader',
             },
             {
-              test: /\.scss$/,
-              use: [
-                {
-                  loader: 'sass-loader',
-                  options: {
-                    sassOptions: {
-                      includePaths: ['../component/src/scss'],
-                    },
-                  },
-                },
-              ],
-            },
-            {
               test: /\.css$/,
               use: [
                 buildFlags.mode === 'development'
@@ -331,6 +317,45 @@ export const createConfiguration: (
                       ),
                     },
                   },
+                },
+              ],
+            },
+            {
+              test: /\.scss$/,
+              use: [
+                buildFlags.mode === 'development'
+                  ? 'style-loader'
+                  : MiniCssExtractPlugin.loader,
+                {
+                  loader: 'css-loader',
+                  options: {
+                    url: true,
+                    sourceMap: false,
+                    modules: false,
+                    import: true,
+                    importLoaders: 1,
+                  },
+                },
+                {
+                  loader: 'sass-loader',
+                  options: {
+                    sassOptions: {
+                      includePaths: [
+                        resolve(rootPath, '..', 'component/src/sass'),
+                        resolve(rootPath, 'src'),
+                      ],
+                    },
+                  },
+                },
+              ],
+            },
+            {
+              test: /\.(png|eot|tiff|svg|woff2|woff|ttf|gif|mp3|jpg)$/,
+              type: 'asset/resource',
+              use: [
+                {
+                  loader: 'image-webpack-loader',
+                  options: {},
                 },
               ],
             },

@@ -141,13 +141,13 @@
 .suggestion-list__divider {
   position: relative;
   display: flex;
-  height: 2.8rem;
+  height: 1.9rem;
   align-items: center;
   justify-content: flex-start;
   padding: 0 0 0 2.4rem;
   margin: 1.2rem 0 0 0;
   color: rgba(var(--center-channel-color-rgb), 0.6);
-  font-size: 1.2rem;
+  font-size: 0.8rem;
   font-weight: 600;
   text-transform: uppercase;
 
@@ -187,7 +187,7 @@
   z-index: 101;
   display: flex;
   width: 100%;
-  min-height: 4rem;
+  // min-height: 4rem;
   align-items: center;
   padding: 8px 2.4rem;
   margin: 0;
