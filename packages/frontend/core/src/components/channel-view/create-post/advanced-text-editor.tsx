@@ -2,8 +2,8 @@ import './advanced_text_editor.scss';
 
 import classNames from 'classnames';
 
-import { Separator } from './formatting_bar/formatting-bar';
-import SendButton from './send_button';
+import { Separator } from './formatting-bar/formatting-bar';
+import SendButton from './send-button';
 import TextBox from './text-box';
 import TexteditorActions from './text-editor-actions';
 
