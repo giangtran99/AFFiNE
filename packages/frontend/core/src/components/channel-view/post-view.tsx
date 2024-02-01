@@ -2,12 +2,14 @@ import { Avatar } from '@affine/component/ui/avatar';
 // import ReactionList from './reaction-list';
 /* eslint-disable max-lines */
 import { DynamicSizeList } from 'dynamic-virtualized-list';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 
 import MessageWithAdditionalContent from './post-list/message-with-additional-content';
 // import PostOptions from './post-options';
 import PostTime from './post-time';
+// import zulipInit from '@affine/core/zulip-js/src';
+
 export const PostListRowListIds = {
   // DATE_LINE: PostListUtils.DATE_LINE,
   // START_OF_NEW_MESSAGES: PostListUtils.START_OF_NEW_MESSAGES,
@@ -43,6 +45,45 @@ const PostList = () => {
   };
   const listRef = useRef();
   const postListRef = useRef();
+  const [messagesMap, setMessagesMap] = useState({}) as any;
+  setMessagesMap([]);
+  useEffect(() => {
+    // (async () => {
+    //   const zulipClient = await zulipInit();
+    //   const readParams = {
+    //     anchor: 'newest',
+    //     num_before: 100,
+    //     num_after: 0,
+    //     apply_markdown: true,
+    //     sender_apply_raw_content: JSON.stringify(['VietISComtor']),
+    //     narrow: [
+    //       // {operator: "sender", operand: "iago@zulip.com"},
+    //       { operator: 'stream', operand: 'design' },
+    //       { operator: 'topic', operand: 'wifi' },
+    //     ],
+    //   };
+    //   const response = await zulipClient.messages.retrieve(readParams);
+    //   const messagesMap = {} as any;
+    //   response.messages.map((message: any) => {
+    //     messagesMap[message.id] = message;
+    //   });
+    //   setMessagesMap(messagesMap);
+    //   const params = {
+    //     event_types: ['message'],
+    //     apply_markdown: 'true',
+    //     sender_apply_raw_content: ['VietISComtor'],
+    //     client_gravatar: 'true',
+    //   };
+    //   await zulipClient.callOnEachEvent((event: any) => {
+    //     if (event.type !== 'message') return;
+    //     setMessagesMap({
+    //       ...messagesMap,
+    //       [`${event.message.id}`]: event.message,
+    //     });
+    //   }, params);
+    // })();
+  }, []);
+  console.log('##messageId', messagesMap);
 
   const renderRow = ({
     /*data, itemId,*/ style,
@@ -51,10 +92,15 @@ const PostList = () => {
     itemId: string;
     style: Record<string, string>;
   }) => {
+    console.log('##messageId in render', messagesMap);
     return (
-      <div style={style} className="post-row__padding top">
-        <PostListRow />
-      </div>
+      <>
+        {Object.keys(messagesMap).map(messageId => (
+          <div key={messageId} style={style} className="post-row__padding top">
+            <PostListRow message={messagesMap[messageId]} />
+          </div>
+        ))}
+      </>
     );
   };
 
@@ -66,41 +112,41 @@ const PostList = () => {
   };
   return (
     <div className="post-list-holder-by-time" key={'postlist-' + 'channelId'}>
-        <div className="post-list__table">
-          <div id="postListContent" className="post-list__content">
-            <AutoSizer>
-              {({ height, width }) => (
-                <DynamicSizeList
-                  ref={listRef}
-                  height={height}
-                  width={width}
-                  className="post-list__dynamic"
-                  itemData={['1', '2', '3']}
-                  // overscanCountForward={OVERSCAN_COUNT_FORWARD}
-                  // overscanCountBackward={OVERSCAN_COUNT_BACKWARD}
-                  // onScroll={this.onScroll}
-                  initScrollToIndex={initScrollToIndex}
-                  canLoadMorePosts={() => {}}
-                  innerRef={postListRef}
-                  style={{ ...virtListStyles, ...dynamicListStyle }}
-                  // innerListStyle={postListStyle}
-                  initRangeToRender={[0, 50]}
-                  loaderId={PostListRowListIds.OLDER_MESSAGES_LOADER}
-                  // correctScrollToBottom={this.props.atLatestPost}
-                  // onItemsRendered={this.onItemsRendered}
-                  // scrollToFailed={this.scrollToFailed}
-                >
-                  {renderRow}
-                </DynamicSizeList>
-              )}
-            </AutoSizer>
-          </div>
+      <div className="post-list__table">
+        <div id="postListContent" className="post-list__content">
+          <AutoSizer>
+            {({ height, width }) => (
+              <DynamicSizeList
+                ref={listRef}
+                height={height}
+                width={width}
+                className="post-list__dynamic"
+                itemData={[1, 2, 3]}
+                // overscanCountForward={OVERSCAN_COUNT_FORWARD}
+                // overscanCountBackward={OVERSCAN_COUNT_BACKWARD}
+                // onScroll={this.onScroll}
+                initScrollToIndex={initScrollToIndex}
+                canLoadMorePosts={() => {}}
+                innerRef={postListRef}
+                style={{ ...virtListStyles, ...dynamicListStyle }}
+                // innerListStyle={postListStyle}
+                initRangeToRender={[0, 50]}
+                loaderId={PostListRowListIds.OLDER_MESSAGES_LOADER}
+                // correctScrollToBottom={this.props.atLatestPost}
+                // onItemsRendered={this.onItemsRendered}
+                // scrollToFailed={this.scrollToFailed}
+              >
+                {renderRow}
+              </DynamicSizeList>
+            )}
+          </AutoSizer>
         </div>
       </div>
+    </div>
   );
 };
 
-const PostListRow = () => {
+const PostListRow = (props: any) => {
   return (
     <div
       role="application"
@@ -114,10 +160,7 @@ const PostListRow = () => {
           data-testid="postContent"
         >
           <div className="post__img">
-            <Avatar
-              url="blob:https://www.facebook.com/f0ba2632-fe3e-4c48-b39a-2c17dd616401"
-              size={30}
-            />
+            <Avatar url={props.message.avatar_url} size={30} />
           </div>
           <div>
             <div
@@ -127,11 +170,11 @@ const PostListRow = () => {
               <div className="col col__name">
                 <button
                   style={{ fontWeight: 600 }}
-                  aria-label={'giangth'}
+                  aria-label={props.message.sender_full_name}
                   className="user-popover style--none"
                   // style={userStyle}
                 >
-                  {'giangth'}
+                  {props.message.sender_full_name}
                 </button>
               </div>
 
@@ -154,7 +197,10 @@ const PostListRow = () => {
               )} */}
             </div>
             <div className={'post__body'} id={`${'post.id'}_message`}>
-              <MessageWithAdditionalContent post={'post'} />
+              <MessageWithAdditionalContent
+                content={props.message.content}
+                post={'post'}
+              />
               {/* {post.file_ids && post.file_ids.length > 0 &&
                   <FileAttachmentListContainer
                     post={post}

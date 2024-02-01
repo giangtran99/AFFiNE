@@ -1,7 +1,10 @@
+import { useRef } from 'react';
+
 import QuickInput from '../quick-input';
 import SuggestionListComponent from './suggestion-list-component';
 
 const SuggestionBox = () => {
+  const textAreaRef = useRef(null);
   return (
     <>
       <div
@@ -10,8 +13,8 @@ const SuggestionBox = () => {
         role="alert"
         className="sr-only"
       />
-      <QuickInput />
-      <SuggestionListComponent open={false} />
+      <QuickInput textAreaRef={textAreaRef} />
+      <SuggestionListComponent open={false} textAreaRef={textAreaRef} />
     </>
   );
 };

@@ -1,10 +1,10 @@
 import AutoSieTextArea from './autosize-textarea';
 
-const QuickInput = () => {
+const QuickInput = (props: any) => {
   return (
     <div className="input-wrapper">
-        <AutoSieTextArea />
-      </div>
+      <AutoSieTextArea textAreaRef={props.textAreaRef} />
+    </div>
   );
 };
 
