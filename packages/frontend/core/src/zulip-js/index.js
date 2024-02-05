@@ -1,5 +1,5 @@
 import api from './api';
-import eventsWrapper from './events_wrapper';
+import eventsWrapper from './events-wrapper';
 import accounts from './resources/accounts';
 import emojis from './resources/emojis';
 import events from './resources/events';
@@ -46,9 +46,9 @@ function resources(config) {
 async function zulipInit(initialConfig) {
   // fixed config
   initialConfig = {
-    username: 'alex.yang@example.org',
-    apiKey: '30Eyo7cFFnPHyaqZ3MI2lh5SV8qDnKSq',
-    realm: 'http://10.1.7.109:9991',
+    username: 'hoanggiangg199@gmail.com',
+    apiKey: 'kMqDI4wEXLkmfkDNm6kKRAb5xNXoRh8U',
+    realm: 'http://192.168.1.8:9991',
   };
 
   const config = initialConfig;

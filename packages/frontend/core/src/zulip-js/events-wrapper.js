@@ -58,6 +58,8 @@ function eventsWrapper(config) {
           queue_id: queueId,
           last_event_id: lastEventId,
           dont_block: false,
+          client_gravatar: true,
+          slim_presence: true,
         });
         if (res.events) {
           res.events.forEach(handleEvent);

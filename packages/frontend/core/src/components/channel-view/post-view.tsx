@@ -1,14 +1,14 @@
 import { Avatar } from '@affine/component/ui/avatar';
 // import ReactionList from './reaction-list';
 /* eslint-disable max-lines */
-import { DynamicSizeList } from 'dynamic-virtualized-list';
-import { useEffect, useRef, useState } from 'react';
+import { DynamicSizeList } from './dynamic-size-list';
+import { useMemo, useEffect, useRef, useState } from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 
 import MessageWithAdditionalContent from './post-list/message-with-additional-content';
 // import PostOptions from './post-options';
 import PostTime from './post-time';
-// import zulipInit from '@affine/core/zulip-js/src';
+import zulipInit from '@affine/core/zulip-js';
 
 export const PostListRowListIds = {
   // DATE_LINE: PostListUtils.DATE_LINE,
@@ -34,82 +34,132 @@ const PostView = () => {
   );
 };
 
+const dynamicListStyle = {
+  willChange: 'transform',
+};
+const virtListStyles = {
+  position: 'absolute',
+  bottom: '0',
+  maxHeight: '100%',
+};
+
+const OVERSCAN_COUNT_BACKWARD = 80;
+const OVERSCAN_COUNT_FORWARD = 80;
+
 const PostList = () => {
-  const dynamicListStyle = {
-    willChange: 'transform',
-  };
-  const virtListStyles = {
-    position: 'absolute',
-    bottom: '0',
-    maxHeight: '100%',
-  };
-  const listRef = useRef();
-  const postListRef = useRef();
+  const listRef = useRef() as any;
+  const postListRef = useRef() as any;
   const [messagesMap, setMessagesMap] = useState({}) as any;
-  setMessagesMap([]);
+  const [scrollIsBottom, setScrollIsBottom] = useState(true);
   useEffect(() => {
-    // (async () => {
-    //   const zulipClient = await zulipInit();
-    //   const readParams = {
-    //     anchor: 'newest',
-    //     num_before: 100,
-    //     num_after: 0,
-    //     apply_markdown: true,
-    //     sender_apply_raw_content: JSON.stringify(['VietISComtor']),
-    //     narrow: [
-    //       // {operator: "sender", operand: "iago@zulip.com"},
-    //       { operator: 'stream', operand: 'design' },
-    //       { operator: 'topic', operand: 'wifi' },
-    //     ],
-    //   };
-    //   const response = await zulipClient.messages.retrieve(readParams);
-    //   const messagesMap = {} as any;
-    //   response.messages.map((message: any) => {
-    //     messagesMap[message.id] = message;
-    //   });
-    //   setMessagesMap(messagesMap);
-    //   const params = {
-    //     event_types: ['message'],
-    //     apply_markdown: 'true',
-    //     sender_apply_raw_content: ['VietISComtor'],
-    //     client_gravatar: 'true',
-    //   };
-    //   await zulipClient.callOnEachEvent((event: any) => {
-    //     if (event.type !== 'message') return;
-    //     setMessagesMap({
-    //       ...messagesMap,
-    //       [`${event.message.id}`]: event.message,
-    //     });
-    //   }, params);
-    // })();
+    (async () => {
+      const zulipClient = await zulipInit();
+      const readParams = {
+        anchor: 'newest',
+        num_before: 20,
+        num_after: 20,
+        apply_markdown: true,
+        sender_apply_raw_content: JSON.stringify(['VietISComtor']),
+        narrow: [
+          // {operator: "sender", operand: "iago@zulip.com"},
+          { operator: 'stream', operand: 'design' },
+          { operator: 'topic', operand: 'wifi' },
+        ],
+      };
+      const response = await zulipClient.messages.retrieve(readParams);
+      const messagesMap = {} as any;
+      response.messages.map((message: any) => {
+        messagesMap[message.id] = message;
+      });
+      setMessagesMap(messagesMap);
+      const params = {
+        event_types: ['message'],
+        apply_markdown: 'true',
+        sender_apply_raw_content: ['VietISComtor'],
+        client_gravatar: 'true',
+        slim_presence: 'true',
+      };
+      await zulipClient.callOnEachEvent((event: any) => {
+        handleEvent(event);
+      }, params);
+    })();
+
+    return () => {
+      // Your component will unmount logic here
+      console.log('Component is unmounted');
+      // Perform any cleanup or additional actions here
+    };
   }, []);
-  console.log('##messageId', messagesMap);
+
+  const handleEvent = (event: any) => {
+    switch (event.type) {
+      case 'stream':
+        break;
+      case 'message':
+        setMessagesMap((oldMessagesMap: any) => ({
+          ...oldMessagesMap,
+          [event.message.id]: event.message,
+        }));
+        // listRef.current?.scrollToItem(0, 'end');
+        break;
+      default:
+        break;
+    }
+  };
+
+  useEffect(() => {
+    if (scrollIsBottom) {
+      listRef.current?.scrollToItem(0, 'end');
+    }
+  }, [Object.keys(messagesMap).length]);
 
   const renderRow = ({
-    /*data, itemId,*/ style,
+    /*data,*/ itemId,
+    style,
   }: {
     data: string[];
     itemId: string;
     style: Record<string, string>;
   }) => {
-    console.log('##messageId in render', messagesMap);
     return (
-      <>
-        {Object.keys(messagesMap).map(messageId => (
-          <div key={messageId} style={style} className="post-row__padding top">
-            <PostListRow message={messagesMap[messageId]} />
-          </div>
-        ))}
-      </>
+      <div key={itemId} style={style} className="post-row__padding top">
+        <PostListRow message={messagesMap[itemId]} />
+      </div>
     );
   };
 
   const initScrollToIndex = () => {
     return {
-      index: 2,
+      index: 0,
       position: 'center',
     };
   };
+
+  const onScroll = ({
+    scrollDirection,
+    scrollOffset,
+    scrollUpdateWasRequested,
+    clientHeight,
+    scrollHeight,
+  }: {
+    scrollDirection: string;
+    scrollOffset: number;
+    scrollUpdateWasRequested: boolean;
+    clientHeight: number;
+    scrollHeight: number;
+  }) => {
+    console.log(
+      '##scrollOffset + clientHeight',
+      scrollOffset,
+      clientHeight,
+      scrollHeight
+    );
+    setScrollIsBottom(
+      scrollOffset + clientHeight >= scrollHeight - 1 &&
+        scrollOffset + clientHeight <= scrollHeight + 1
+    );
+  };
+
   return (
     <div className="post-list-holder-by-time" key={'postlist-' + 'channelId'}>
       <div className="post-list__table">
@@ -121,18 +171,18 @@ const PostList = () => {
                 height={height}
                 width={width}
                 className="post-list__dynamic"
-                itemData={[1, 2, 3]}
-                // overscanCountForward={OVERSCAN_COUNT_FORWARD}
-                // overscanCountBackward={OVERSCAN_COUNT_BACKWARD}
-                // onScroll={this.onScroll}
+                itemData={Object.keys(messagesMap)}
+                overscanCountForward={OVERSCAN_COUNT_FORWARD}
+                overscanCountBackward={OVERSCAN_COUNT_BACKWARD}
+                onScroll={onScroll}
                 initScrollToIndex={initScrollToIndex}
                 canLoadMorePosts={() => {}}
                 innerRef={postListRef}
                 style={{ ...virtListStyles, ...dynamicListStyle }}
                 // innerListStyle={postListStyle}
                 initRangeToRender={[0, 50]}
-                loaderId={PostListRowListIds.OLDER_MESSAGES_LOADER}
-                // correctScrollToBottom={this.props.atLatestPost}
+                // loaderId={PostListRowListIds.NEWER_MESSAGES_LOADER}
+                // correctScrollToBottom={true}
                 // onItemsRendered={this.onItemsRendered}
                 // scrollToFailed={this.scrollToFailed}
               >
@@ -147,6 +197,8 @@ const PostList = () => {
 };
 
 const PostListRow = (props: any) => {
+  const { avatar_url, content, sender_full_name } = props.message;
+
   return (
     <div
       role="application"
@@ -160,7 +212,7 @@ const PostListRow = (props: any) => {
           data-testid="postContent"
         >
           <div className="post__img">
-            <Avatar url={props.message.avatar_url} size={30} />
+            <Avatar className="avatar" url={avatar_url} size={32} />
           </div>
           <div>
             <div
@@ -170,11 +222,11 @@ const PostListRow = (props: any) => {
               <div className="col col__name">
                 <button
                   style={{ fontWeight: 600 }}
-                  aria-label={props.message.sender_full_name}
+                  aria-label={sender_full_name}
                   className="user-popover style--none"
                   // style={userStyle}
                 >
-                  {props.message.sender_full_name}
+                  {sender_full_name}
                 </button>
               </div>
 
@@ -197,10 +249,7 @@ const PostListRow = (props: any) => {
               )} */}
             </div>
             <div className={'post__body'} id={`${'post.id'}_message`}>
-              <MessageWithAdditionalContent
-                content={props.message.content}
-                post={'post'}
-              />
+              <MessageWithAdditionalContent content={content} post={'post'} />
               {/* {post.file_ids && post.file_ids.length > 0 &&
                   <FileAttachmentListContainer
                     post={post}

@@ -1,29 +1,28 @@
-// import zulipInit from '@affine/core/zulip-js/src';
-// import { useState } from 'react';
+import zulipInit from '@affine/core/zulip-js';
+import { useRef, useState } from 'react';
 
-const AutoSieTextArea = (props: any) => {
-  // const [value, setValue] = useState('');
+const AutoSieTextArea = () => {
+  const inputRef = useRef('') as any;
+  const onKeyDown = async (e: any) => {
+    if (e.keyCode === 13 && inputRef.current.value) {
+      const client = await zulipInit();
+      // Send a stream message
+      let params = {
+        to: [8],
+        type: 'stream',
+        topic: 'wifi',
+        content: inputRef.current.value,
+      };
+      console.log(await client.messages.send(params));
+      inputRef.current.value = '';
+    }
+  };
   return (
     <>
       <div>
         <textarea
-          // onKeyDown={async e => {
-          //   // if (e.keyCode === 13) {
-          //   //   const client = await zulipInit();
-          //   //   // Send a stream message
-          //   //   let params = {
-          //   //     to: 8,
-          //   //     type: 'stream',
-          //   //     topic: 'wifi',
-          //   //     content: value,
-          //   //   };
-          //   //   console.log(await client.messages.send(params));
-          //   // }
-          // }}
-          // onChange={e => {
-          //   setValue(e.target.value);
-          // }}
-          ref={props.textAreaRef}
+          onKeyDown={onKeyDown}
+          ref={inputRef}
           // ref={setTextareaRef}
           data-testid={'post_textbox'}
           className="form-control custom-textarea textbox-edit-area custom-textarea--emoji-picker"

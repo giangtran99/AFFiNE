@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 
 import AtMentionSuggestion from './at-mention-suggestion';
-// import zulipInit from '@affine/core/zulip-js/src';
+import zulipInit from '@affine/core/zulip-js';
 
 const SuggestionContainer = (props: any) => {
   return (
@@ -27,15 +27,13 @@ const SuggestionListComponent = (props: any) => {
   const mainClass = 'suggestion-list suggestion-list--' + 'top';
   const contentClass =
     'suggestion-list__content suggestion-list__content--' + 'top';
-  setMembers([]);
-  console.log('##textAreaRef', props.textAreaRef?.current?.value);
 
   useEffect(() => {
-    // (async () => {
-    //   const zulipClient = await zulipInit();
-    //   const response = await zulipClient.users.retrieve();
-    //   setMembers(response.members);
-    // })();
+    (async () => {
+      const zulipClient = await zulipInit();
+      const response = await zulipClient.users.retrieve();
+      setMembers(response.members);
+    })();
   }, []);
 
   const render = () => {

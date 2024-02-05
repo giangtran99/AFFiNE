@@ -14,14 +14,13 @@ async function api(baseUrl, config, method, params) {
     },
   };
   if (method === 'POST') {
-    options.data = params;
-    options.body = new FormData();
+    options.data = new FormData();
     Object.keys(params).forEach(key => {
       let data = params[key];
       if (Array.isArray(data)) {
         data = JSON.stringify(data);
       }
-      options.body.append(key, data);
+      options.data.append(key, data);
     });
   } else if (params) {
     Object.entries(params).forEach(([key, value]) => {

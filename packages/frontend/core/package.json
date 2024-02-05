@@ -75,6 +75,7 @@
     "lodash-es": "^4.17.21",
     "lottie-react": "^2.4.0",
     "lottie-web": "^5.12.2",
+    "memoize-one": "^3.1.1",
     "mini-css-extract-plugin": "^2.7.6",
     "nanoid": "^5.0.3",
     "next-auth": "^4.24.5",
