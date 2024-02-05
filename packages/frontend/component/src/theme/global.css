@@ -310,3 +310,7 @@ body {
   position: relative;
   overflow: hidden;
 }
+
+.user-mention {
+  background-color: hsla(240, 70%, 70%, 0.2);
+}

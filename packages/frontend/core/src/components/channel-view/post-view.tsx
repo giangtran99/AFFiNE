@@ -50,6 +50,7 @@ const PostList = () => {
   const listRef = useRef() as any;
   const postListRef = useRef() as any;
   const [messagesMap, setMessagesMap] = useState({}) as any;
+  const [queueId, setQueueId] = useState() as any;
   const [scrollIsBottom, setScrollIsBottom] = useState(true);
   useEffect(() => {
     (async () => {
@@ -85,6 +86,15 @@ const PostList = () => {
     })();
 
     return () => {
+      // (async () => {
+      //   const client = await zulipInit();
+      //   // Register a queue
+      //   // Delete a queue
+      //   const deregisterParams = {
+      //     queue_id: queueId,
+      //   };
+      //   console.log(await client.queues.deregister(deregisterParams));
+      // })()
       // Your component will unmount logic here
       console.log('Component is unmounted');
       // Perform any cleanup or additional actions here
@@ -100,7 +110,9 @@ const PostList = () => {
           ...oldMessagesMap,
           [event.message.id]: event.message,
         }));
-        // listRef.current?.scrollToItem(0, 'end');
+        break;
+      case 'heartbeat':
+        setQueueId(event.queue_id);
         break;
       default:
         break;
@@ -198,7 +210,6 @@ const PostList = () => {
 
 const PostListRow = (props: any) => {
   const { avatar_url, content, sender_full_name } = props.message;
-
   return (
     <div
       role="application"
@@ -281,9 +292,7 @@ const PostListRow = (props: any) => {
               <div className="col d-flex align-items-center">
                 <PostTime />
               </div>
-
             </div>
-
           </div> */}
       </div>
     </div>

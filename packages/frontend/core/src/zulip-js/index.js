@@ -46,9 +46,9 @@ function resources(config) {
 async function zulipInit(initialConfig) {
   // fixed config
   initialConfig = {
-    username: 'hoanggiangg199@gmail.com',
-    apiKey: 'kMqDI4wEXLkmfkDNm6kKRAb5xNXoRh8U',
-    realm: 'http://192.168.1.8:9991',
+    username: 'giangth@vietis.com.vn',
+    apiKey: 'dhTiGhXcoS4KdFnS70DOb6nV107GFAOs',
+    realm: 'http://10.1.7.109:9991',
   };
 
   const config = initialConfig;

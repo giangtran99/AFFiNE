@@ -1,8 +1,13 @@
 import axios from 'axios';
 
+function encodeBase64(value) {
+  // Convert Unicode strings to a format that can be encoded by btoa
+  const encodedValue = btoa(unescape(encodeURIComponent(value)));
+  return encodedValue;
+}
 async function api(baseUrl, config, method, params) {
   const url = new URL(baseUrl);
-  const auth = `${config.username}:${config.apiKey}`;
+  const auth = encodeBase64(`${config.username}:${config.apiKey}`);
   const authHeader = `Basic ${auth}`;
   const options = {
     method,
