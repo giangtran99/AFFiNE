@@ -1,5 +1,6 @@
 @import 'react-datepicker/dist/react-datepicker.css';
 @import './fonts.css';
+@import './code.css';
 
 * {
   -webkit-overflow-scrolling: touch;

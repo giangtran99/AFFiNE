@@ -4,9 +4,7 @@ const PostMessageView = (props: any) => {
   const formatJSONMessage = (message: any) => {
     try {
       const formatedMessage = JSON.parse(message) as any;
-      console.log('##formatedMessage', formatedMessage);
-      return `English: ${formatedMessage.translated_data.english}</br>Vietnamese: ${formatedMessage.translated_data.vietnamese}</br>Japanese: ${formatedMessage.translated_data.japanese}
-`;
+      return `English: ${formatedMessage.translated_data.english}</br>Vietnamese: ${formatedMessage.translated_data.vietnamese}</br>Japanese: ${formatedMessage.translated_data.japanese}`;
     } catch (e) {
       return message;
     }

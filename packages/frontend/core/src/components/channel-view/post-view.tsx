@@ -126,7 +126,8 @@ const PostList = () => {
   }, [Object.keys(messagesMap).length]);
 
   const renderRow = ({
-    /*data,*/ itemId,
+    /*data,*/
+    itemId,
     style,
   }: {
     data: string[];
