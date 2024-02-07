@@ -6,15 +6,16 @@ const AutoSieTextArea = () => {
   const onKeyDown = async (e: any) => {
     if (e.keyCode === 13 && inputRef.current.value) {
       const client = await zulipInit();
+      const message = inputRef.current.value;
       // Send a stream message
       let params = {
         to: [8],
         type: 'stream',
         topic: 'wifi',
-        content: inputRef.current.value,
+        content: message,
       };
-      console.log(await client.messages.send(params));
       inputRef.current.value = '';
+      console.log(await client.messages.send(params));
     }
   };
   return (
