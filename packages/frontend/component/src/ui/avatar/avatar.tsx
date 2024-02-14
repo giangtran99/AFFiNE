@@ -72,7 +72,6 @@ export const Avatar = memo(
       const [imageDom, setImageDom] = useState<HTMLDivElement | null>(null);
       const [removeButtonDom, setRemoveButtonDom] =
         useState<HTMLButtonElement | null>(null);
-      console.log('##alo avatar');
       return (
         <AvatarRoot className={style.avatarRoot} {...avatarProps} ref={ref}>
           <Tooltip
@@ -139,11 +138,7 @@ export const Avatar = memo(
         </AvatarRoot>
       );
     }
-  ),
-  (prevProps, nextProps) => {
-    console.log('##prevProps', { prevProps, nextProps });
-    return !(prevProps.url === nextProps.url);
-  }
+  )
 );
 
 Avatar.displayName = 'Avatar';

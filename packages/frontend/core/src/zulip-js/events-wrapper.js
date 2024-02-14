@@ -37,7 +37,7 @@ function eventsWrapper(config) {
     }
   }
 
-  async function callOnEachEvent(callback, params) {
+  async function callOnEachEvent(callback, params, callbackQueueId) {
     let queueId = null;
     let lastEventId = -1;
 
@@ -53,6 +53,7 @@ function eventsWrapper(config) {
         lastEventId = queueData.lastEventId;
       }
       try {
+        callbackQueueId(queueId);
         // eslint-disable-next-line no-await-in-loop
         const res = await z.events.retrieve({
           queue_id: queueId,

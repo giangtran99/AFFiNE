@@ -1,21 +1,16 @@
-import zulipInit from '@affine/core/zulip-js';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
+import { useSendMessage } from '../zulip-manager';
 
 const AutoSieTextArea = () => {
   const inputRef = useRef('') as any;
+  const { sendMessage } = useSendMessage();
   const onKeyDown = async (e: any) => {
     if (e.keyCode === 13 && inputRef.current.value) {
-      const client = await zulipInit();
+      e.preventDefault();
       const message = inputRef.current.value;
-      // Send a stream message
-      let params = {
-        to: [8],
-        type: 'stream',
-        topic: 'wifi',
-        content: message,
-      };
       inputRef.current.value = '';
-      console.log(await client.messages.send(params));
+      // Send a stream message
+      await sendMessage(message);
     }
   };
   return (
@@ -29,7 +24,7 @@ const AutoSieTextArea = () => {
           className="form-control custom-textarea textbox-edit-area custom-textarea--emoji-picker"
           id={'post_textbox'}
           aria-label="write to rown square"
-          style={{ visibility: 'visible', height: 60, width: '100%' }}
+          style={{ visibility: 'visible', height: 60, width: '80%' }}
           // {...heightProps}
           // {...otherProps}
           role="textbox"

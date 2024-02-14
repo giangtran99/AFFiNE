@@ -12,29 +12,26 @@ async function api(baseUrl, config, method, params) {
   const options = {
     method,
     headers: {
-      // 'Accept': 'application/json',
-      // 'Content-Type': 'application/json;charset=UTF-8',
-      // "Access-Control-Allow-Origin":"*",
       Authorization: authHeader,
     },
   };
   if (method === 'POST') {
-    options.data = new FormData();
+    options.body = new FormData();
     Object.keys(params).forEach(key => {
       let data = params[key];
       if (Array.isArray(data)) {
         data = JSON.stringify(data);
       }
-      options.data.append(key, data);
+      options.body.append(key, data);
     });
   } else if (params) {
     Object.entries(params).forEach(([key, value]) => {
       url.searchParams.append(key, value);
     });
   }
-  const response = await axios(url.href, options);
+  const response = await fetch(url.href, options);
   try {
-    return response.data;
+    return await response.json();
   } catch (e) {
     if (e instanceof SyntaxError) {
       // We probably got a non-JSON response from the server.

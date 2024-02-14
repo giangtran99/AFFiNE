@@ -69,7 +69,7 @@ const DetailPageLayout = ({
   const { clientBorder } = useAtomValue(appSettingAtom);
   const [resizing, setResizing] = useAtom(editorSidebarResizingAtom);
   const [open, setOpen] = useAtom(editorSidebarOpenAtom);
-
+  console.log('##layout render');
   return (
     <div className={styles.root} data-client-border={clientBorder && open}>
       <div className={styles.mainContainer}>
@@ -162,7 +162,7 @@ const DetailPageImpl = memo(function DetailPageImpl({ page }: { page: Page }) {
       setTemporaryFilter,
     ]
   );
-
+  console.log('##detail render');
   return (
     <>
       <DetailPageLayout

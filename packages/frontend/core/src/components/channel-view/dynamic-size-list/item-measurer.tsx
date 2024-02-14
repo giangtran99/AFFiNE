@@ -73,6 +73,7 @@ export default class ItemMeasurer extends Component {
   _measureItemAnimFrame = null;
 
   componentDidMount() {
+    console.log('##cac');
     // Force sync measure for the initial mount.
     // This is necessary to support the DynamicSizeList layout logic.
     if (isSafari && this.props.size) {
@@ -180,10 +181,10 @@ export default class ItemMeasurer extends Component {
   }
 
   _measureItem = forceScrollCorrection => {
+    console.log('##musure new item');
     const { handleNewMeasurements, size: oldSize, itemId } = this.props;
 
     const node = this._node.current;
-
     if (
       node &&
       node.ownerDocument &&

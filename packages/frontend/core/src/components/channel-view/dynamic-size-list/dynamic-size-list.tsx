@@ -5,7 +5,7 @@ import { createElement, PureComponent } from 'react';
 import ItemMeasurer from './item-measurer';
 
 const atBottomMargin = 10;
-
+window.logDSLEvents = true;
 const getItemMetadata = (props, index, listMetaData) => {
   const { itemOffsetMap, itemSizeMap } = listMetaData;
   const { itemData } = props;
@@ -215,7 +215,7 @@ export default class DynamicSizeList extends PureComponent {
     //so manually keeping scroll position bottom for now
     const element = this._outerRef;
     if (index === 0 && align === 'end') {
-      this.scrollTo(element.scrollHeight - this.props.height);
+      this.scrollTo(element.scrollHeight);
       return;
     }
     const offsetOfItem = getOffsetForIndexAndAlignment(
@@ -273,8 +273,6 @@ export default class DynamicSizeList extends PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    console.log('##scrollHeight', this.state.scrolledToInitIndex);
-
     if (this.state.scrolledToInitIndex) {
       const {
         scrollDirection,
@@ -289,7 +287,6 @@ export default class DynamicSizeList extends PureComponent {
         scrollUpdateWasRequested: prevScrollUpdateWasRequested,
         scrollHeight: previousScrollHeight,
       } = prevState;
-      console.log('##scrollOffset11', scrollOffset, prevScrollOffset);
       if (
         scrollDirection !== prevScrollDirection ||
         scrollOffset !== prevScrollOffset ||
@@ -360,7 +357,6 @@ export default class DynamicSizeList extends PureComponent {
 
     const onScroll = this._onScrollVertical;
     const items = this._renderItems();
-
     return createElement(
       outerTagName,
       {
@@ -498,6 +494,8 @@ export default class DynamicSizeList extends PureComponent {
   // This method is called after mount and update.
   // List implementations can override this method to be notified.
   _commitHook = () => {
+    console.log('## cha sao hihi');
+
     if (
       !this.state.scrolledToInitIndex &&
       Object.keys(this._listMetaData.itemOffsetMap).length
@@ -507,7 +505,6 @@ export default class DynamicSizeList extends PureComponent {
       this.setState({
         scrolledToInitIndex: true,
       });
-
       if (index === 0) {
         this._keepScrollToBottom = true;
       } else {
@@ -678,6 +675,7 @@ export default class DynamicSizeList extends PureComponent {
   };
 
   _generateOffsetMeasurements = () => {
+    console.log('##djt me ca the gioi');
     const { itemOffsetMap, itemSizeMap } = this._listMetaData;
     const { itemData } = this.props;
     this._listMetaData.totalMeasuredSize = 0;
@@ -699,7 +697,7 @@ export default class DynamicSizeList extends PureComponent {
   };
 
   _handleNewMeasurements = (key, newSize, forceScrollCorrection) => {
-    console.log('##can thiet', this.state.scrolledToInitIndex);
+    console.log('##bo tay');
 
     const { itemSizeMap } = this._listMetaData;
     const { itemData } = this.props;
@@ -735,7 +733,7 @@ export default class DynamicSizeList extends PureComponent {
         'props.correctScrollToBottom=' + this.props.correctScrollToBottom
       );
     }
-
+    console.log("## dua hoai ni'", this._keepScrollToBottom);
     if (
       (wasAtBottom || this._keepScrollToBottom) &&
       this.props.correctScrollToBottom
@@ -793,7 +791,6 @@ export default class DynamicSizeList extends PureComponent {
       );
       return;
     }
-
     this._generateOffsetMeasurements();
   };
 
@@ -845,40 +842,68 @@ export default class DynamicSizeList extends PureComponent {
   };
 
   _renderItems = () => {
-    const { children, direction, itemData } = this.props;
+    console.log('##mic check', this._listMetaData);
+    const { children, direction, itemData, loaderId } = this.props;
     const width = this.innerRefWidth;
+    let [startIndex, stopIndex] = this._getRangeToRender();
     const itemCount = itemData.length;
     const items = [];
-    console.log('##this._listMetaData', this._listMetaData);
     if (itemCount > 0) {
-      for (let index = 0; index <= itemCount - 1; index++) {
+      for (let index = 0; index < itemCount; index++) {
         const { size } = getItemMetadata(this.props, index, this._listMetaData);
+
+        const [
+          localOlderPostsToRenderStartIndex,
+          localOlderPostsToRenderStopIndex,
+        ] = this.state.localOlderPostsToRender;
+
+        const isItemInLocalPosts =
+          index >= localOlderPostsToRenderStartIndex &&
+          index < localOlderPostsToRenderStopIndex + 1 &&
+          localOlderPostsToRenderStartIndex === stopIndex + 1;
+
+        const isLoader = itemData[index] === loaderId;
         const itemId = itemData[index];
 
         // It's important to read style after fetching item metadata.
         // getItemMetadata() will clear stale styles.
-        const item = createElement(children, {
-          data: itemData,
-          itemId,
-        });
-
-        // Always wrap children in a ItemMeasurer to detect changes in size.
-        items.push(
-          createElement(ItemMeasurer, {
-            direction,
-            handleNewMeasurements: this._handleNewMeasurements,
-            index,
-            item,
-            key: itemId,
-            size,
+        const style = this._getItemStyle(index);
+        if (
+          (index >= startIndex && index < stopIndex + 1) ||
+          isItemInLocalPosts ||
+          isLoader
+        ) {
+          const item = createElement(children, {
+            data: itemData,
             itemId,
-            width,
-            onUnmount: this._onItemRowUnmount,
-            itemCount,
-          })
-        );
+          });
+
+          // Always wrap children in a ItemMeasurer to detect changes in size.
+          items.push(
+            createElement(ItemMeasurer, {
+              direction,
+              handleNewMeasurements: this._handleNewMeasurements,
+              index,
+              item,
+              key: itemId,
+              size,
+              itemId,
+              width,
+              onUnmount: this._onItemRowUnmount,
+              itemCount,
+            })
+          );
+        } else {
+          items.push(
+            createElement('div', {
+              key: itemId,
+              style,
+            })
+          );
+        }
       }
     }
+
     return items;
   };
 

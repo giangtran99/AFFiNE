@@ -348,7 +348,6 @@ __metadata:
     "@vanilla-extract/dynamic": "npm:^2.0.3"
     animejs: "npm:^3.2.2"
     async-call-rpc: "npm:^6.3.1"
-    axios: "npm:^1.6.7"
     bytes: "npm:^3.1.2"
     classnames: "npm:2.3.2"
     clsx: "npm:^2.0.0"
@@ -371,6 +370,7 @@ __metadata:
     jotai: "npm:^2.5.1"
     jotai-devtools: "npm:^0.7.0"
     jotai-effect: "npm:^0.2.3"
+    jotai-redux: "npm:^0.2.1"
     jotai-scope: "npm:^0.4.1"
     lit: "npm:^3.0.2"
     lodash-es: "npm:^4.17.21"
@@ -393,6 +393,7 @@ __metadata:
     react-router-dom: "npm:^6.16.0"
     react-virtualized-auto-sizer: "npm:1.0.7"
     react-virtuoso: "npm:^4.6.2"
+    redux: "npm:^5.0.1"
     rxjs: "npm:^7.8.1"
     sass: "npm:1.62.1"
     sass-loader: "npm:13.2.2"
@@ -15883,17 +15884,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.6.7":
-  version: 1.6.7
-  resolution: "axios@npm:1.6.7"
-  dependencies:
-    follow-redirects: "npm:^1.15.4"
-    form-data: "npm:^4.0.0"
-    proxy-from-env: "npm:^1.1.0"
-  checksum: a1932b089ece759cd261f175d9ebf4d41c8994cf0c0767cda86055c7a19bcfdade8ae3464bf4cec4c8b142f4a657dc664fb77a41855e8376cf38b86d7a86518f
-  languageName: node
-  linkType: hard
-
 "babel-core@npm:^7.0.0-bridge.0":
   version: 7.0.0-bridge.0
   resolution: "babel-core@npm:7.0.0-bridge.0"
@@ -21549,16 +21539,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.15.4":
-  version: 1.15.5
-  resolution: "follow-redirects@npm:1.15.5"
-  peerDependenciesMeta:
-    debug:
-      optional: true
-  checksum: d467f13c1c6aa734599b8b369cd7a625b20081af358f6204ff515f6f4116eb440de9c4e0c49f10798eeb0df26c95dd05d5e0d9ddc5786ab1a8a8abefe92929b4
-  languageName: node
-  linkType: hard
-
 "foreground-child@npm:^2.0.0":
   version: 2.0.0
   resolution: "foreground-child@npm:2.0.0"
@@ -25352,6 +25332,15 @@ __metadata:
   peerDependencies:
     jotai: ">=2.4.3"
   checksum: 3c99923fa6684231920ff34c15d42e4fc06e6dabe9596d6ac480eb35153ef3119c7682077370654b289aafb39b6e9a42b72f410cfda92f40c856af1b4598c4ba
+  languageName: node
+  linkType: hard
+
+"jotai-redux@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "jotai-redux@npm:0.2.1"
+  peerDependencies:
+    jotai: ">=1.11.0"
+  checksum: 7661e842aae23cd3079eb75ccc2bd5eeeb9e0ae36a260758f4d0569d476e3aa91dad340096588c42005e5621750aa01bf1508577228a848cfa3484a67b3c4d52
   languageName: node
   linkType: hard
 
@@ -31847,6 +31836,13 @@ __metadata:
   dependencies:
     "@babel/runtime": "npm:^7.9.2"
   checksum: 371e4833b671193303a7dea7803c8fdc8e0d566740c78f580e0a3b77b4161da25037626900a2205a5d616117fa6ad09a4232e5a110bd437186b5c6355a041750
+  languageName: node
+  linkType: hard
+
+"redux@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "redux@npm:5.0.1"
+  checksum: a373f9ed65693ead58bea5ef61c1d6bef39da9f2706db3be6f84815f3a1283230ecd1184efb1b3daa7f807d8211b0181564ca8f336fc6ee0b1e2fa0ba06737c2
   languageName: node
   linkType: hard
 

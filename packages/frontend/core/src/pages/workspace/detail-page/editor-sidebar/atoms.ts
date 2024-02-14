@@ -29,7 +29,7 @@ export interface EditorSidebarState {
 const baseStateAtom = atom<EditorSidebarState>({
   isOpen: false,
   resizing: false,
-  width: 300, // todo: should be resizable
+  width: 420, // todo: should be resizable
   activeExtension: extensions[0],
   extensions: extensions, // todo: maybe should be dynamic (by feature flag?)
 });

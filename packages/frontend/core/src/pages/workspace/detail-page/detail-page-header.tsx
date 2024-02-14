@@ -113,6 +113,8 @@ export function DetailPageHeader({
   const RightHeader = isWindowsDesktop
     ? WindowsMainPageHeaderRight
     : NonWindowsMainPageHeaderRight;
+
+  console.log('##render header');
   return (
     <Header className={styles.mainHeader}>
       <SidebarSwitch show={!leftSidebarOpen} />
